@@ -1,0 +1,6 @@
+http:
+  address: 0.0.0.0:8086
+  workers:
+    command: "php ../../../../worker.php"
+    pool:
+      numWorkers: 1

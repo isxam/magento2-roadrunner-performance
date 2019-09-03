@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Isxam\M2RoadRunner\Application\Request\RegistryInterface"
+                type="Isxam\M2RoadRunner\Application\Request\Registry"/>
+    <preference for="Isxam\M2RoadRunner\Application\Response\ResponseConverterInterface"
+                type="Isxam\M2RoadRunner\Application\Response\ResponseConverter"/>
+
+    <preference for="Magento\Framework\App\Request\Http"
+                type="Isxam\M2RoadRunner\Framework\App\Request\Http"/>
+    <preference for="Magento\Framework\Webapi\Request"
+                type="Isxam\M2RoadRunner\Framework\Webapi\Request"/>
+    <preference for="Magento\Framework\Webapi\Rest\Request"
+                type="Isxam\M2RoadRunner\Framework\Webapi\Rest\Request"/>
+
+    <type name="Magento\Webapi\Controller\Rest">
+        <arguments>
+            <argument name="request" xsi:type="object">Isxam\M2RoadRunner\Framework\Webapi\Rest\Request\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Webapi\Controller\Rest\InputParamsResolver">
+        <plugin name="m2roadrunner-remove-state" type="Isxam\M2RoadRunner\Plugin\Webapi\Controller\Rest\InputParamsResolver\RemoveRouteState"/>
+    </type>
+
+    <type name="Magento\Framework\App\State">
+        <plugin name="m2roadrunner-mute-exception" type="Isxam\M2RoadRunner\Plugin\App\State\MuteAreaException"/>
+    </type>
+</config>
