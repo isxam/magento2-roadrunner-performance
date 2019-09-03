@@ -1,0 +1,72 @@
+config:
+  environments:
+    apache:
+        target: "http://rr.local"
+    roadrunner:
+        target: "http://0.0.0.0:8086"
+  defaults:
+    headers:
+      Authorization: "Bearer ee5n7bh0ru4se3rhqo5hshy0yfapznpq"
+  phases:
+    - duration: 1
+      arrivalRate: 1
+      name: "Main phase"
+  variables:
+    prefix:
+      - "S6-AP-"
+scenarios:
+  - name: "S1. Create category"
+    flow:
+      - loop:
+          - post:
+              url: "/rest/V1/categories"
+              json:
+                category:
+                  name: "name-{{prefix}}-{{ $loopCount }}"
+                  parent_id: 2
+                  is_active: true
+        count: 100
+  - name: "S2. Countries list"
+    flow:
+      - loop:
+          - get:
+              url: "/rest/V1/directory/countries"
+        count: 100
+  - name: "S3. Product types list"
+    flow:
+      - loop:
+          - get:
+              url: "/rest/V1/products/types"
+        count: 100
+  - name: "S4. Product attribute sets list"
+    flow:
+     - loop:
+         - get:
+             url: "/rest/V1/products/attribute-sets/sets/list?searchCriteria"
+       count: 100
+  - name: "S5. Categories list"
+    flow:
+      - loop:
+          - get:
+              url: "/rest/V1/categories"
+        count: 100
+  - name: "S6. Create product"
+    flow:
+      - loop:
+          - post:
+              url: '/rest/V1/products'
+              json:
+                product:
+                  sku: "sku-{{prefix}}-{{ $loopCount }}"
+                  name: "name-{{prefix}}-{{ $loopCount }}"
+                  attribute_set_id: 4
+                  price: 100
+                  type_id: "simple"
+        count: 100
+  - name: "S7. Get product list"
+    flow:
+      - loop:
+        - get:
+           url: "/rest/V1/products?searchCriteria[pageSize]=20"
+        count: 100
+
