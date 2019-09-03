@@ -44,11 +44,11 @@ scenarios:
          - get:
              url: "/rest/V1/products/attribute-sets/sets/list?searchCriteria"
        count: 100
-  - name: "S5. Categories list"
+  - name: "S5. Category get"
     flow:
       - loop:
           - get:
-              url: "/rest/V1/categories"
+              url: "/rest/V1/categories/2"
         count: 100
   - name: "S6. Create product"
     flow:
